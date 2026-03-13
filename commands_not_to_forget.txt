@@ -4,6 +4,8 @@
 # A way to check if your docker container is running python
 # docker compose run --rm <container_name> python --version
 
+# For a specific import run
+# docker compose run --rm app python -c "import <module_name>; print(<module_name>.__version__)"
 
 GIT BRANCHING WORKFLOW
 =====================
