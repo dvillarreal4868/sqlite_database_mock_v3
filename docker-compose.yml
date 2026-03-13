@@ -1,0 +1,29 @@
+services:
+  app:
+    # Build the image from the Dockerfile in this directory
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    # Mount your project folder into the container at /app.
+    # This means the container always sees your latest code
+    # without needing to rebuild the image after every edit.
+    # The syntax is: host_path:container_path
+    # The "." means "the folder where docker-compose.yml is"
+    volumes:
+      - .:/app
+
+    # Set /app as the working directory inside the container
+    working_dir: /app
+
+    # Keep the container running so PyCharm can connect to it.
+    # Without this, the container would start, run CMD from
+    # the Dockerfile, then immediately stop. "tail -f /dev/null"
+    # is a harmless command that runs forever, keeping the
+    # container alive while PyCharm sends it your scripts.
+    command: tail -f /dev/null
+
+    # (Optional) Forward a port if you run a Jupyter server
+    # or a web app inside the container later.
+    ports:
+      - "8888:8888"

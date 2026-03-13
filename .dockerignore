@@ -1,0 +1,21 @@
+.git
+.gitignore
+__pycache__
+*.pyc
+*.pyo
+.idea
+.venv
+*.egg-info
+dist
+build
+.env
+data/
+outputs/
+
+# Quarto
+_site/
+_book/
+_freeze/
+_output/
+*.html
+!docker-compose.yml

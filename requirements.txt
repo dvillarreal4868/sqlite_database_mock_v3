@@ -1,0 +1,20 @@
+numpy==1.26.4
+pandas==2.2.2
+matplotlib==3.9.0
+seaborn==0.13.2
+plotly==5.18.0
+scipy==1.12.0
+scikit-learn==1.5.0
+jupyter==1.0.0
+ipykernel==6.29.4
+requests==2.32.3
+jupyterlab==4.3.4
+pytest==9.0.2
+
+# Quarto support
+pyyaml==6.0.2
+nbformat==5.10.4
+nbclient==0.10.2
+
+# Data Version Control
+dvc[gdrive,webdav]==3.66.1 # For Google Drive and Box access

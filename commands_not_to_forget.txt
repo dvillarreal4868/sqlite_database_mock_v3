@@ -1,0 +1,105 @@
+# A fast way to convert a jupyter notebook into a report (html format).
+# command: docker compose exec app quarto render notebooks/environment_test.ipynb --to html --embed-resources --output-dir /app/reports
+
+# A way to check if your docker container is running python
+# docker exec <container_name> python --version
+
+GIT BRANCHING WORKFLOW
+=====================
+
+STARTING A NEW BRANCH
+  git checkout main                        # make sure you're on main first
+  git pull                                 # get latest changes
+  git checkout -b branch-name              # create AND switch into new branch
+  git push -u origin branch-name           # push branch to remote & set upstream
+                                           # (after this, plain "git push" works)
+
+DO YOUR WORK (repeat as needed)
+  git add .                                # stage all changes
+  git commit -m "Describe what you did"    # commit
+  git push                                 # push to remote (upstream already set)
+
+MERGE BRANCH INTO MAIN
+  git checkout main                        # switch back to main
+  git pull                                 # get any updates from others
+  git merge branch-name                    # merge your branch into main
+  git push                                 # push the updated main to remote
+
+DELETE THE BRANCH (after merge)
+  git branch -d branch-name               # delete local branch
+  git push origin --delete branch-name     # delete remote branch
+
+USEFUL EXTRAS
+  git branch                               # list local branches
+  git branch -a                            # list all branches (local + remote)
+  git log --oneline                        # compact commit history
+  git stash                                # temporarily shelve uncommitted changes
+  git stash pop                            # bring back stashed changes
+
+DVC CHEAT SHEET
+===============
+
+INITIAL SETUP
+  git init
+  dvc init
+  git add .dvc .dvcignore
+  git commit -m "Initialize Git and DVC"
+
+TRACK NEW DATA
+  dvc add path/to/data
+  git add path/to/data.dvc path/to/.gitignore
+  git commit -m "Track data with DVC"
+  git push
+
+UPDATE TRACKED DATA (after changes)
+  dvc add path/to/data
+  git add path/to/data.dvc
+  git commit -m "Update data"
+  git push
+
+REVERT TO PREVIOUS VERSION
+  git log --oneline                              # find the commit hash
+  git checkout <commit> -- path/to/data.dvc      # restore old .dvc file
+  dvc checkout                                   # restore actual data
+  git add path/to/data.dvc                       # commit the revert
+  git commit -m "Revert data to previous version"
+  git push
+
+PEEK AT OLD DATA (without committing anything)
+  git log --oneline                              # find the old commit hash
+  git checkout <commit> -- path/to/data.dvc      # grab the old .dvc file
+  dvc checkout                                   # restores the actual old data
+  # ... look at / test your old data ...
+  git checkout HEAD -- path/to/data.dvc          # restore current .dvc file
+  dvc checkout                                   # restores your current data
+  #
+  # Example with real values:
+  #   git checkout a3f7b2c -- data/my_dataset.csv.dvc
+  #   dvc checkout
+  #   (inspect your old data)
+  #   git checkout HEAD -- data/my_dataset.csv.dvc
+  #   dvc checkout
+  #
+  # NOTE: <commit> = the hash from git log, path/to/data.dvc = wherever
+  #       your actual .dvc file lives (e.g. data/my_dataset.csv.dvc).
+  #       Unlike REVERT above, you never git add/commit here —
+  #       you're just peeking and snapping back.
+
+CHECK STATUS
+  dvc status                  # see if tracked data has changed
+  cat path/to/data.dvc       # see the hash DVC is tracking
+  cat path/to/.gitignore     # confirm Git is ignoring the data
+  git status                  # check Git side of things
+
+REMOTE (once IT confirms Box)
+  dvc remote add -d myremote webdav://dav.box.com/dav/your/folder/path
+  dvc remote modify --local myremote user "your-email"
+  dvc remote modify --local myremote password "your-password"
+  git add .dvc/config
+  git commit -m "Add DVC remote"
+  dvc push                    # upload data to remote
+  dvc pull                    # download data from remote
+
+REMOVE DATA FROM GIT (if accidentally committed)
+  git rm -r --cached path/to/data
+  git commit -m "Remove data from Git tracking"
