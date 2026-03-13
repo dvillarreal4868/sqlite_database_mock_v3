@@ -222,3 +222,5 @@ registry/crosswalk.csv
 archive/
 deliveries/
 incoming/
+/archive
+/registry
