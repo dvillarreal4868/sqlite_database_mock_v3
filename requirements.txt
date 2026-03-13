@@ -10,6 +10,7 @@ ipykernel==6.29.4
 requests==2.32.3
 jupyterlab==4.3.4
 pytest==9.0.2
+h5py==3.16.0
 
 # Quarto support
 pyyaml==6.0.2
