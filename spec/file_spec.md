@@ -1,6 +1,6 @@
 # Patient File Specification (HDF5)
 
-**Version:** 0.1-draft
+**Version:** 0.1.0-draft
 **Last updated:** 2026-03-13
 
 ---
