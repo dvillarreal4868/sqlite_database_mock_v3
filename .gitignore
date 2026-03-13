@@ -214,3 +214,11 @@ __marimo__/
 _site/
 _book/
 /.quarto/
+
+# Database
+*.h5
+registry/registry.db
+registry/crosswalk.csv
+archive/
+deliveries/
+incoming/
