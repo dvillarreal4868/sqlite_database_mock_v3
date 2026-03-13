@@ -17,7 +17,7 @@ We use DVC (Data Version Control) to version both the registry and the `.h5` fil
 <details>
 <summary><strong>Phase 1: Define the HDF5 File Specification</strong></summary>
 
-- [ ] 1.1 — Draft the patient file specification document
+- [x] 1.1 — Draft the patient file specification document
 - [ ] 1.2 — Define required vs optional groups and attributes
 - [ ] 1.3 — Define naming conventions and data type standards
 - [ ] 1.4 — Review spec with supervisor and finalize
