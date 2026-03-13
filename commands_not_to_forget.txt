@@ -2,7 +2,8 @@
 # command: docker compose exec app quarto render notebooks/environment_test.ipynb --to html --embed-resources --output-dir /app/reports
 
 # A way to check if your docker container is running python
-# docker exec <container_name> python --version
+# docker compose run --rm <container_name> python --version
+
 
 GIT BRANCHING WORKFLOW
 =====================
