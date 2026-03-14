@@ -1,4 +1,10 @@
-"""Tests for rebuild_registry.ingest.notes."""
+"""
+tests/test_rebuild_registry/test_ingest_notes.py
+
+PURPOSE:
+    Tests for ingest_notes() — reads Notes/note_{NNNN}/ groups and inserts
+    rows into the notes table.
+"""
 
 import h5py
 
@@ -7,6 +13,7 @@ from rebuild_registry.ingest.notes import ingest_notes
 
 
 def _setup_patient(db_conn, h5, source="archive/p.h5"):
+    """Insert a patient row first (foreign key requirement)."""
     cur = db_conn.cursor()
     pid = ingest_patient(cur, h5, source)
     db_conn.commit()
@@ -14,7 +21,9 @@ def _setup_patient(db_conn, h5, source="archive/p.h5"):
 
 
 class TestIngestNotes:
+
     def test_two_notes_ingested(self, db_conn, tmp_h5):
+        """Our fixture creates 2 notes — both should produce rows."""
         path = tmp_h5(notes=True)
         with h5py.File(str(path), "r") as h5:
             cur, pid = _setup_patient(db_conn, h5)
@@ -25,6 +34,7 @@ class TestIngestNotes:
         assert count == 2
 
     def test_note_attributes(self, db_conn, tmp_h5):
+        """Verify that all note attributes are correctly stored."""
         path = tmp_h5(notes=True)
         with h5py.File(str(path), "r") as h5:
             cur, pid = _setup_patient(db_conn, h5)
@@ -40,11 +50,12 @@ class TestIngestNotes:
         assert note_name == "note_0001"
         assert author == "Dr. Smith_1"
         assert date == "2026-03-11"
-        assert category == "radiology"
-        assert reviewed == 1
+        assert category == "radiology"     # Odd-numbered notes are radiology
+        assert reviewed == 1               # True → 1
         assert char_length is not None and char_length > 0
 
     def test_reviewed_stored_as_int(self, db_conn, tmp_h5):
+        """The 'reviewed' boolean should be stored as 0 or 1 in SQLite."""
         path = tmp_h5(notes=True)
         with h5py.File(str(path), "r") as h5:
             cur, pid = _setup_patient(db_conn, h5)
@@ -56,6 +67,7 @@ class TestIngestNotes:
             assert v in (0, 1)
 
     def test_no_notes_group(self, db_conn, tmp_h5):
+        """If Notes/ doesn't exist, zero rows and no errors."""
         path = tmp_h5(notes=False)
         with h5py.File(str(path), "r") as h5:
             cur, pid = _setup_patient(db_conn, h5)
@@ -66,6 +78,7 @@ class TestIngestNotes:
         assert count == 0
 
     def test_group_path_format(self, db_conn, tmp_h5):
+        """The stored group_path should look like '/Notes/note_0001'."""
         path = tmp_h5(notes=True)
         with h5py.File(str(path), "r") as h5:
             cur, pid = _setup_patient(db_conn, h5)
