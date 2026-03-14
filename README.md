@@ -30,8 +30,9 @@ We use DVC (Data Version Control) to version both the registry and the `.h5` fil
 - [X] 2.1 — Initialize the project repository
 - [x] 2.2 — Initialize DVC
 - [x] 2.3 — Create the SQLite registry schema
-- [ ] 2.4 — Build the registry rebuild script
-- [ ] 2.5 — Version the empty registry and archive with DVC
+- [x] 2.4 — Build the registry rebuild script
+- [x] 2.5 — Build the validation script
+- [ ] 2.6 — Version the empty registry and archive with DVC
 
 </details>
 
@@ -63,7 +64,7 @@ We use DVC (Data Version Control) to version both the registry and the `.h5` fil
 <summary><strong>Phase 5: Hardening the System</strong></summary>
 
 - [ ] 5.1 — Consolidate all scripts into the CLI tool
-- [ ] 5.2 — Build the validation script
+- [x] 5.2 — Build the validation script
 - [ ] 5.3 — Write basic tests
 - [ ] 5.4 — Write the file specification document (formal version)
 - [ ] 5.5 — Write the runbook / operations guide
@@ -119,7 +120,7 @@ project/
 │   ├── ingest_ehr.py                # Add structured EHR/chart review data
 │   ├── ingest_notes.py              # Add clinical notes
 │   ├── rebuild_registry.py          # Scan archive → rebuild SQLite index
-│   ├── validate.py                  # Check .h5 files against spec
+│   ├── validate/                    # Check .h5 files against spec (modular package)
 │   └── summary.py                   # Database summary and status reports
 ├── notebooks/
 │   ├── 01_generate_mock_data.ipynb
@@ -389,7 +390,7 @@ This phase produces no code. It produces a document that all future code referen
 <details>
 <summary><strong>Step 2.4 — Build the validation script</strong></summary>
 
-- Write `src/validate.py`. This script:
+- Write `src/validate/`. This script:
   - Opens a `.h5` file and checks it against the spec from Phase 1.
   - Verifies all required top-level attributes are present.
   - Verifies all required groups exist (even if empty).
@@ -469,7 +470,7 @@ This phase produces no code. It produces a document that all future code referen
 - Run `src/ingest_imaging.py` against `incoming/irb_2025_001/` (ingests 6 CTs).
 - Run `src/ingest_imaging.py` against `incoming/irb_2025_002/` (ingests 7 MRIs).
 - Write a similar `src/ingest_ehr.py` to handle structured EHR data — run against both IRBs.
-- Run `src/validate.py --all` to check every file against the spec.
+- Run `python -m validate --all` to check every file against the spec.
 - Verify: 16 `.h5` files in the archive. 6 have CT imaging. 7 have MRI imaging. All 16 have EHR data. Overlap patients have data from both IRBs.
 
 </details>
@@ -545,7 +546,7 @@ This phase produces no code. It produces a document that all future code referen
 
 - Run `src/ingest_imaging.py` against the supplemental directories.
 - This is the key test: the script must correctly open existing `.h5` files and add new imaging groups without disturbing existing data.
-- Run `src/validate.py --all` to verify nothing was corrupted.
+- Run `python -m validate --all` to verify nothing was corrupted.
 
 </details>
 
