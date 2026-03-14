@@ -7,6 +7,12 @@
 # For a specific import run
 # docker compose run --rm app python -c "import <module_name>; print(<module_name>.__version__)"
 
+# To build registry
+#docker compose run --rm -e PYTHONPATH=src app python -m rebuild_registry
+
+# To run test
+# docker compose run --rm -e PYTHONPATH=src app python -m pytest tests/test_rebuild_registry/ -v
+
 GIT BRANCHING WORKFLOW
 =====================
 
