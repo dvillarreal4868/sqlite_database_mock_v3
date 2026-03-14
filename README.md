@@ -29,7 +29,7 @@ We use DVC (Data Version Control) to version both the registry and the `.h5` fil
 
 - [X] 2.1 — Initialize the project repository
 - [x] 2.2 — Initialize DVC
-- [ ] 2.3 — Create the SQLite registry schema
+- [x] 2.3 — Create the SQLite registry schema
 - [ ] 2.4 — Build the registry rebuild script
 - [ ] 2.5 — Version the empty registry and archive with DVC
 
